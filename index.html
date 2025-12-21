@@ -48,7 +48,6 @@
         <img src="assets/img/profile-img.jpg" alt="" class="img-fluid rounded-circle">
         <h1 class="text-light"><a href="index.html">Natalie Olivo</a></h1>
         <div class="social-links mt-3 text-center">
-          <a href="https://twitter.com/NatalieOlivo" class="twitter"><i class="bx bxl-twitter"></i></a>
           <a href="https://www.linkedin.com/in/natalie-olivo-82548951/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
           <a href="https://medium.com/@NatalieOlivo" class="medium"><i class="bx bxl-medium"></i></a>
         </div>
@@ -58,8 +57,19 @@
         <ul>
           <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i><span>Home</span></a></li>
           <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i><span>About</span></a></li>
-          <li><a href="#projects" class="nav-link scrollto"><i class="bx bx-server"></i><span>Projects</span></a></li>
-          <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i><span>Resume</span></a></li>
+          <li class="dropdown"><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i><span>Resume</span></a>
+            <ul>
+              <li><a href="#professional-summary" class="nav-link scrollto">Professional Summary</a></li>
+              <li><a href="#technical-skills" class="nav-link scrollto">Core Technical Skills</a></li>
+              <li><a href="#professional-experience" class="nav-link scrollto">Professional Experience</a></li>
+              <li><a href="#featured-projects" class="nav-link scrollto">Featured Projects</a></li>
+              <li><a href="#certifications" class="nav-link scrollto">Certifications</a></li>
+              <li><a href="#education-training" class="nav-link scrollto">Education & Training</a></li>
+              <li><a href="#awards-recognition" class="nav-link scrollto">Awards & Recognition</a></li>
+              <li><a href="#early-career" class="nav-link scrollto">Early Career Experience</a></li>
+              <li><a href="#download-resume" class="nav-link scrollto">Download PDF</a></li>
+            </ul>
+          </li>
         </ul>
       </nav><!-- .nav-menu -->
     </div>
@@ -69,7 +79,7 @@
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
     <div class="hero-container" data-aos="fade-in">
       <h1>Natalie Olivo</h1>
-      <p><a href="/assets/resume/Natalie_Olivo_20230519.pdf">Resume</a>/<a href="#about">About</a>/<a href="#projects">Projects</a>/<a href="https://medium.com/@NatalieOlivo">Blog</a></p>
+      <p><a href="#about">About</a>/<a href="#resume">Resume</a>/<a href="https://medium.com/@NatalieOlivo">Blog</a></p>
     </div>
   </section><!-- End Hero -->
 
@@ -86,8 +96,7 @@
 
         <div class="row">
           <div class="col-lg-4" data-aos="fade-right">
-            <img src="assets/img/charlie-day.jpg" class="img-fluid" alt="Life without graph databases.">
-            <figcaption>Charlie Day, "Always Sunny in Philadelphia", passionately performing Extract, Transform, and Load processes.</figcaption>
+            <img src="assets/img/vb_pic.jpeg" class="img-fluid" alt="Life without graph databases.">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
             <h3>Natalie Olivo, Machine Learning Engineer</h3>
@@ -101,86 +110,8 @@
             </p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-right">
-            <h3>Community</h3>
-            <p>
-              I've lived in Fort Wayne, Chicago, Louisville, Boston and DC for career opportunities and found myself naturally embedded in professional communities. 
-              Here in Cleveland, I electively seek this community out and help create it as Director of Women Who Code. We organize <a href="https://www.meetup.com/women-who-code-cleveland/">monthly virtual events</a> aimed to highlight, connect, and empower technologists in the Cleveland area and beyond. 
-            </p>
-            <p>
-              In my first job in my career as an actuarial analyst, I had a front-row seat to the transition from Pensions to 401ks. 
-              In my first job in my next career as a data scientist, I had a front-row seat to the increasing privitization of healthcare related research in the US. 
-              After the outbreak of COVID-19 and the wide-spread adoption of remote work in 2020, I reflected on my priorities and found myself leaving Washington, DC for Cleveland, OH so that I may be closer to my family, and many incredible volleyball venues.
-            </p>
-            <p>
-              Volleyball and the community it brings me are really important parts of my life. I joyously play at the AVP BB level.  
-            </p>
-          </div>
-          <div class="col-lg-4" data-aos="fade-left">
-           <img src="assets/img/vb_pic.jpeg" class="img-fluid" alt="Life without graph databases."> 
-          </div>
-        </div>
-        <!-- <div class="row">
-          <div class="col-lg-4" data-aos="fade-right">
-            <img src="assets/img/graph_data.jpg", class="img-fluid" alt="Life without graph databases.">
-            <figcaption>Alice Pieszecki, monitoring the latest news with a knowledge graph.</figcaption>
-          </div>
-          <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-            <p>
-
-            </p>
-          </div>
-        </div> -->
-    
-
       </div>
     </section><!-- End About Section -->
-
-    <!-- ======= Projects Section ======= -->
-    <section id="projects" class="projects">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Projects</h2>
-          <p> A non-exhaustive sample of work pursuing my personal interests.</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
-            <div class="icon"><i class="bi bi-briefcase"></i></div>
-            <h4 class="title"><a href="">Criminal Court Cases</a></h4>
-            <p class="description">Inspired by <a href="https://case.law/">Harvard Law School's Caselaw Access</a> project, this is a webscraping and data storage exercise for Cuyahoga County's Criminal Court Case Docket.<br><a href="https://github.com/nmolivo/case_scrape">Github</a> / <a href="https://nmolivo.github.io/cuyacourts/">Website</a></p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-            <div class="icon"><i class="bi bi-card-checklist"></i></div>
-            <h4 class="title"><a href="https://www.womenwhocode.com/cleveland">Women Who Code Cleveland</a></h4>
-            <p class="description">As Director and Technical speaker, I enjoy building community and exploring the possibilities of technology.<br><a href="https://www.meetup.com/women-who-code-cleveland/">Meetup.com</a> / <a href="https://forms.gle/cSNQX1VcKvhYnW7m7">Speaker Volunteer Form</a></p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-            <div class="icon"><i class="bi bi-bar-chart"></i></div>
-            <h4 class="title"><a href="">Gala Deck</a></h4>
-            <p class="description">I present a surreal application, which reads in a curator's instagram feed and proposes a custom Tarot Reading using Stable Diffusion, CLIP embeddings, and style transfer. For those who want reflect on thier experiences alongside universal symbolism.<br>Github / Gallery</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon"><i class="bi bi-book"></i></div>
-            <h4 class="title"><a href="">SQL Speaker Series</a></h4>
-            <p class="description">Developed in the 70s, SQL remains the de facto standard programming language for relational databases. Given over two 2-hour sessions, these virtual, interactive workshops focused on queries and covered security, administration, and salary.<br><a href="https://nmolivo.github.io/intro_to_sql/">Notes</a> / <a href="https://docs.google.com/presentation/d/1Za_wcYI-QbJy2OePYTL2YTA8L2vMf9NZhNw1h5WnZ1k/">Slides</a> / <a href="https://www.meetup.com/women-who-code-cleveland/events/294828236/">Session 1</a> / <a href="https://www.meetup.com/women-who-code-cleveland/events/295185399/">Session 2</a></p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-            <div class="icon"><i class="bi bi-brightness-high"></i></div>
-            <h4 class="title"><a href="https://github.com/nmolivo/spontaneous_eda">Tree Based Algorithms in ML</a></h4>
-            <p class="description">Coming Soon: An Earth Day inspired deep-dive into classification algorithms inspired by trees and forests</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-            <div class="icon"><i class="bi bi-calendar4-week"></i></div>
-            <h4 class="title"><a href="">Hello OpenCV</a></h4>
-            <p class="description">Coming Soon: Hello Computer Vision! Before we programmatically apply logic to images, let's first get acquainted with the ways in which we must pre-process them.</p>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End Interests Section -->
 
 <!-- ======= Resume Section ======= -->
 <section id="resume" class="resume">
@@ -202,13 +133,13 @@
       </div>
 
       <!-- Professional Summary -->
-      <div class="resume-section">
+      <div class="resume-section" id="professional-summary">
         <h3 class="resume-title"><i class="bi bi-person-badge"></i> Professional Summary</h3>
         <p>AI/ML Engineer with 8+ years of experience designing and deploying scalable machine learning systems, data pipelines, and AI-powered solutions across government, insurance, and supply chain sectors. Proven track record of architecting enterprise-scale ML frameworks, building agentic AI systems, and leading cross-functional technical initiatives.</p>
       </div>
 
       <!-- Core Technical Skills -->
-      <div class="resume-section">
+      <div class="resume-section" id="technical-skills">
         <h3 class="resume-title"><i class="bi bi-gear"></i> Core Technical Skills</h3>
         <div class="skills-container">
           <div class="skill-category">
@@ -281,7 +212,7 @@
       </div>
 
       <!-- Professional Experience -->
-      <div class="resume-section">
+      <div class="resume-section" id="professional-experience">
         <h3 class="resume-title"><i class="bi bi-briefcase"></i> Professional Experience</h3>
 
         <div class="resume-item">
@@ -357,7 +288,7 @@
       </div>
 
       <!-- Projects -->
-      <div class="resume-section">
+      <div class="resume-section" id="featured-projects">
         <h3 class="resume-title"><i class="bi bi-code-square"></i> Featured Projects</h3>
 
         <div class="resume-item">
@@ -370,7 +301,7 @@
       </div>
 
       <!-- Certifications -->
-      <div class="resume-section">
+      <div class="resume-section" id="certifications">
         <h3 class="resume-title"><i class="bi bi-award"></i> Certifications</h3>
         <div class="cert-list">
           <p><span class="badge-cert">Data Integration and API Development for AI Applications</span></p>
@@ -382,7 +313,7 @@
       </div>
 
       <!-- Education -->
-      <div class="resume-section">
+      <div class="resume-section" id="education-training">
         <h3 class="resume-title"><i class="bi bi-book"></i> Education & Training</h3>
 
         <div class="resume-item">
@@ -410,7 +341,7 @@
       </div>
 
       <!-- Awards & Recognition -->
-      <div class="resume-section">
+      <div class="resume-section" id="awards-recognition">
         <h3 class="resume-title"><i class="bi bi-star"></i> Awards & Recognition</h3>
         <ul class="awards-list">
           <li>Supported 2-time Government Innovation Award winning product (Recipient Insight)</li>
@@ -420,7 +351,7 @@
       </div>
 
       <!-- Early Career -->
-      <div class="resume-section">
+      <div class="resume-section" id="early-career">
         <h3 class="resume-title"><i class="bi bi-clock-history"></i> Early Career Experience</h3>
 
         <div class="resume-item">
@@ -470,7 +401,7 @@
       </div>
 
       <!-- PDF Download -->
-      <div class="resume-download">
+      <div class="resume-download" id="download-resume">
         <a href="/assets/resume/Natalie_Olivo_20230519.pdf" class="btn btn-primary" download>
           <i class="bi bi-download"></i> Download PDF Resume
         </a>

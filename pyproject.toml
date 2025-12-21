@@ -3,7 +3,7 @@ name = "portfolio"
 version = "0.1.0"
 description = "Personal portfolio website"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "google-api-python-client>=2.187.0",
     "google-auth-oauthlib>=1.2.3",

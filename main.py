@@ -1,11 +1,12 @@
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from google.auth.transport.requests import Request
 import json
 import os
 import re
-from urllib.request import urlopen
 from datetime import datetime
+from urllib.request import urlopen
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
 
 def fetch_google_doc(doc_id, creds):
