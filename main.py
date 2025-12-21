@@ -5,7 +5,7 @@ from datetime import datetime
 from urllib.request import urlopen
 
 from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 
@@ -65,22 +65,20 @@ def extract_text_from_doc(doc_content):
 def download_pdf(doc_id, creds, output_path):
     """Download Google Doc as PDF"""
     try:
-        # Refresh credentials if needed
-        creds.refresh(Request())
+        # ❌ Remove this line - service accounts don't need it
+        # creds.refresh(Request())
 
         drive_service = build('drive', 'v3', credentials=creds)
         request = drive_service.files().export_media(
             fileId=doc_id,
             mimeType='application/pdf'
         )
-
         pdf_content = request.execute()
 
         # Save PDF
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(pdf_content)
-
         print(f"✓ PDF saved to {output_path}")
         return True
     except Exception as e:
@@ -253,11 +251,14 @@ def main():
         return
 
     creds_info = json.loads(creds_json)
-    creds = Credentials.from_authorized_user_info(creds_info)
+    creds = service_account.Credentials.from_service_account_info(creds_info, scopes=[
+        'https://www.googleapis.com/auth/documents.readonly',
+        'https://www.googleapis.com/auth/drive.readonly'  # Add this!
+    ])
 
-    doc_id = os.environ.get('DOC_ID')
+    doc_id = os.environ.get('GOOGLE_DOC_ID')
     if not doc_id:
-        print("Error: DOC_ID environment variable not set")
+        print("Error: GOOGLE_DOC_ID environment variable not set")
         return
 
     print("Fetching Google Doc...")
