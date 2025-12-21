@@ -31,7 +31,7 @@ jobs:
         env:
           GOOGLE_DOC_ID: ${{ secrets.GOOGLE_DOC_ID }}
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: python scripts/main.py
+        run: python main.py
 
       - name: Create Pull Request (GitHub API)
         run: |
