@@ -17,7 +17,7 @@ def fetch_google_doc(doc_id, creds):
 
 
 def extract_text_from_doc(doc_content):
-    """Extract all text and structure from Google Doc"""
+    """Extract all text and structure from Google Doc, tracking bold formatting"""
     sections = {}
     current_section = None
     current_list = []
@@ -26,11 +26,21 @@ def extract_text_from_doc(doc_content):
         if 'paragraph' in element:
             paragraph = element.get('paragraph', {})
 
-            # Get all text in this paragraph
+            # Get all text and track if first run is bold
             text_parts = []
-            for run in paragraph.get('elements', []):
+            first_run_bold = False
+
+            for idx, run in enumerate(paragraph.get('elements', [])):
                 if 'textRun' in run:
-                    text_parts.append(run['textRun'].get('content', ''))
+                    text = run['textRun'].get('content', '')
+                    text_style = run['textRun'].get('textStyle', {})
+                    is_bold = text_style.get('bold', False)
+
+                    # Track if first run (that has content) is bold
+                    if idx == 0 and text.strip() and is_bold:
+                        first_run_bold = True
+
+                    text_parts.append(text)
 
             text = ''.join(text_parts).strip()
 
@@ -53,11 +63,18 @@ def extract_text_from_doc(doc_content):
                 # Check if it's a bullet point
                 if paragraph.get('bullet'):
                     current_list.append(text)
+                # Check if it's a bold label like "Skills:", "Clients:", "Philosophy:"
+                elif first_run_bold and (':' in text or ';' in text):
+                    # This is a bold label, add it as a special marker
+                    current_list.append(text)
                 else:
                     if current_section and current_list:
                         sections[current_section] = current_list
                         current_list = []
                     sections[text] = None
+
+    if current_list and current_section:
+        sections[current_section] = current_list
 
     return sections
 
@@ -87,30 +104,20 @@ def download_pdf(doc_id, creds, output_path):
 
 
 def generate_resume_html(sections, include_contact=False):
-    """Generate resume HTML from extracted sections"""
+    """Generate resume HTML only for Professional Experience and beyond"""
     html = []
-    html.append('      <!-- Contact Info -->')
-    html.append('      <div class="contact-info-box">')
-    html.append('        <h4>Contact Information</h4>')
 
-    if include_contact:
-        html.append(
-            '        <p><i class="bi bi-envelope"></i> nmolivo@gmail.com</p>')
-        html.append(
-            '        <p><i class="bi bi-telephone"></i> +34 604 81 43 03</p>')
-    else:
-        # Only show location and citizenship (hide email/phone on website)
-        pass
+    # Sections to update (skip Professional Summary and Core Technical Skills)
+    sections_to_update = [
+        'Professional Experience',
+        'Projects',
+        'Certifications',
+        'Education & Training',
+        'Awards & Recognition',
+        'Early Career Experience',
+    ]
 
-    html.append('        <p><i class="bi bi-geo-alt"></i> Alicante, Spain</p>')
-    html.append('        <p><i class="bi bi-check-circle"></i> US Citizen</p>')
-    html.append('      </div>')
-    html.append('')
-
-    # Map section names to HTML
     section_mapping = {
-        'Professional Summary': ('person-badge', 'Professional Summary'),
-        'Core Technical Skills': ('gear', 'Core Technical Skills'),
         'Professional Experience': ('briefcase', 'Professional Experience'),
         'Projects': ('code-square', 'Featured Projects'),
         'Certifications': ('award', 'Certifications'),
@@ -119,109 +126,109 @@ def generate_resume_html(sections, include_contact=False):
         'Early Career Experience': ('clock-history', 'Early Career Experience'),
     }
 
-    for section_name, (icon, display_name) in section_mapping.items():
+    for section_name in sections_to_update:
         if section_name not in sections:
             continue
 
+        icon, display_name = section_mapping[section_name]
         content = sections[section_name]
 
-        # Professional Summary - just text
-        if section_name == 'Professional Summary':
-            html.append('      <!-- Professional Summary -->')
-            html.append('      <div class="resume-section">')
-            html.append(
-                f'        <h3 class="resume-title"><i class="bi bi-{icon}"></i> {display_name}</h3>')
-            if isinstance(content, list):
-                for item in content:
-                    html.append(f'        <p>{item}</p>')
-            else:
-                html.append(f'        <p>{content}</p>')
-            html.append('      </div>')
-
-        # Skills - special formatting
-        elif section_name == 'Core Technical Skills':
-            html.append('      <!-- Core Technical Skills -->')
-            html.append('      <div class="resume-section">')
-            html.append(
-                f'        <h3 class="resume-title"><i class="bi bi-{icon}"></i> {display_name}</h3>')
-            html.append('        <div class="skills-container">')
-            if isinstance(content, list):
-                for item in content:
-                    # Parse "Category: skill1, skill2, skill3"
-                    if ':' in item:
-                        category, skills = item.split(':', 1)
-                        category = category.strip()
-                        skills = [s.strip() for s in skills.split(',')]
-                        html.append('          <div class="skill-category">')
-                        html.append(f'            <h5>{category}</h5>')
-                        html.append('            <div class="skill-tags">')
-                        for skill in skills:
-                            html.append(
-                                f'              <span class="badge">{skill}</span>')
-                        html.append('            </div>')
-                        html.append('          </div>')
-            html.append('        </div>')
-            html.append('      </div>')
+        html.append(f'      <!-- {display_name} -->')
+        html.append('      <div class="resume-section">')
+        html.append(
+            f'        <h3 class="resume-title"><i class="bi bi-{icon}"></i> {display_name}</h3>')
 
         # Awards - simple list
-        elif section_name == 'Awards & Recognition':
-            html.append('      <!-- Awards & Recognition -->')
-            html.append('      <div class="resume-section">')
-            html.append(
-                f'        <h3 class="resume-title"><i class="bi bi-{icon}"></i> {display_name}</h3>')
+        if section_name == 'Awards & Recognition':
             html.append('        <ul class="awards-list">')
             if isinstance(content, list):
                 for item in content:
                     html.append(f'          <li>{item}</li>')
             html.append('        </ul>')
-            html.append('      </div>')
 
-        # Experience & Education - items with details
+        # Certifications - badge list
+        elif section_name == 'Certifications':
+            html.append('        <div class="cert-list">')
+            if isinstance(content, list):
+                for item in content:
+                    html.append(
+                        f'          <p><span class="badge-cert">{item}</span></p>')
+            html.append('        </div>')
+
+        # Experience & Education - items with title, company/dates, location, bullets
         else:
-            html.append(f'      <!-- {display_name} -->')
-            html.append('      <div class="resume-section">')
-            html.append(
-                f'        <h3 class="resume-title"><i class="bi bi-{icon}"></i> {display_name}</h3>')
             if isinstance(content, list):
                 i = 0
                 while i < len(content):
                     item = content[i]
+
+                    # Skip empty lines
+                    if not item or item.strip() == '':
+                        i += 1
+                        continue
+
                     html.append('        <div class="resume-item">')
                     html.append(f'          <h4>{item}</h4>')
                     i += 1
 
-                    # Next items are details (company, dates, description)
-                    if i < len(content):
+                    # Next line: Company | Dates (company name and full time on same line)
+                    if i < len(content) and content[i].strip():
                         html.append(f'          <h5>{content[i]}</h5>')
                         i += 1
 
-                    if i < len(content):
+                    # Next line: Location (in italics)
+                    if i < len(content) and content[i].strip():
                         html.append(f'          <p><em>{content[i]}</em></p>')
                         i += 1
 
-                    # Collect bullet points
+                    # Collect bullet points and bold labels until next title or end
                     bullets = []
-                    while i < len(content) and not content[i].endswith(':') and not any(c.isupper() for c in content[i].split()[0:1]):
-                        bullets.append(content[i])
-                        i += 1
+                    while i < len(content):
+                        line = content[i].strip()
+                        # Stop if we hit an empty line followed by what looks like a title
+                        if not line:
+                            i += 1
+                            # Check if next non-empty line is a title (starts with capital, followed by role words)
+                            j = i
+                            while j < len(content) and not content[j].strip():
+                                j += 1
+                            if j < len(content) and content[j][0].isupper() and not any(content[j].startswith(label) for label in ['Skills:', 'Clients:', 'Philosophy:']):
+                                break
+                            continue
+                        # Check if it's a bold label (Skills:, Clients:, Philosophy:, etc.)
+                        is_bold_label = any(line.startswith(label) for label in [
+                                            'Skills:', 'Clients:', 'Philosophy:', 'Technologies:'])
+                        # If it's a bullet point, bold label, or regular description, add it
+                        if line.startswith('•') or line.startswith('-') or is_bold_label or not line[0].isupper():
+                            # Clean bullet markers
+                            if line.startswith('•') or line.startswith('-'):
+                                line = line[1:].strip()
+                            bullets.append(line)
+                            i += 1
+                        else:
+                            # Stop at next title
+                            break
 
                     if bullets:
                         html.append('          <ul>')
                         for bullet in bullets:
-                            html.append(f'            <li>{bullet}</li>')
+                            # Check if bullet starts with bold labels like "Skills:", "Clients:", "Philosophy:", etc.
+                            if ':' in bullet:
+                                potential_label = bullet.split(':')[0].strip()
+                                if potential_label in ['Skills', 'Clients', 'Philosophy', 'Technologies']:
+                                    label, content_part = bullet.split(':', 1)
+                                    html.append(
+                                        f'            <li><strong>{label}:</strong>{content_part}</li>')
+                                else:
+                                    html.append(
+                                        f'            <li>{bullet}</li>')
+                            else:
+                                html.append(f'            <li>{bullet}</li>')
                         html.append('          </ul>')
 
                     html.append('        </div>')
-            html.append('      </div>')
 
-    # Download button
-    html.append('      <!-- PDF Download -->')
-    html.append('      <div class="resume-download">')
-    html.append(
-        '        <a href="/assets/resume/Natalie_Olivo_Resume.pdf" class="btn btn-primary" download>')
-    html.append('          <i class="bi bi-download"></i> Download PDF Resume')
-    html.append('        </a>')
-    html.append('      </div>')
+        html.append('      </div>')
 
     return '\n'.join(html)
 
