@@ -33,10 +33,22 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: python main.py
 
-      - name: Create Pull Request (GitHub API)
+      - name: Create and push branch
         run: |
-          # ... commit and push to branch first ...
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout -b resume-update
+          git add .
+          if ! git diff --cached --quiet; then
+            git commit -m "Update resume from Google Docs"
+            git push origin resume-update --force
+          else
+            echo "No changes to commit"
+            exit 0
+          fi
 
+      - name: Create Pull Request
+        run: |
           curl -X POST \
           -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
