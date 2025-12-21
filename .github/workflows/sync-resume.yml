@@ -1,9 +1,10 @@
 name: Sync Resume from Google Docs
     
 on:
-schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sundays
-workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
 sync-resume:
@@ -21,14 +22,14 @@ sync-resume:
     - name: Install dependencies
     run: |
         python -m pip install --upgrade pip
-        pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib python-dotenv
+        pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
     - name: Run resume fetch script
     env:
         GOOGLE_DOC_ID: ${{ secrets.GOOGLE_DOC_ID }}
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     run: |
-        python scripts/fetch_resume.py
+        python scripts/main.py
 
     - name: Commit and push changes
     run: |

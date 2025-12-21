@@ -82,9 +82,6 @@ def extract_text_from_doc(doc_content):
 def download_pdf(doc_id, creds, output_path):
     """Download Google Doc as PDF"""
     try:
-        # ❌ Remove this line - service accounts don't need it
-        # creds.refresh(Request())
-
         drive_service = build('drive', 'v3', credentials=creds)
         request = drive_service.files().export_media(
             fileId=doc_id,
@@ -278,20 +275,16 @@ def main():
     pdf_path = 'assets/resume/Natalie_Olivo_Resume.pdf'
     download_pdf(doc_id, creds, pdf_path)
 
-    print("Generating HTML...")
-    resume_html = generate_resume_html(sections, include_contact=False)
+    # print("Generating HTML...")
+    # resume_html = generate_resume_html(sections, include_contact=False)
 
-    print("Updating index.html...")
-    update_index_html(resume_html)
+    # print("Updating index.html...")
+    # update_index_html(resume_html)
 
     print("\n✓ Resume updated successfully!")
-    print(f"  - HTML updated in index.html")
+    # print(f"  - HTML updated in index.html")
     print(f"  - PDF saved to {pdf_path}")
-    print(f"  - Phone/Email hidden from website display")
-
-
-if __name__ == '__main__':
-    main()
+    # print(f"  - Phone/Email hidden from website display")
 
 
 if __name__ == '__main__':
